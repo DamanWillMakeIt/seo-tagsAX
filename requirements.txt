@@ -1,0 +1,10 @@
+flask
+requests
+beautifulsoup4
+pypdf
+fpdf2
+cloudinary
+google-genai
+python-dotenv
+gunicorn
+gevent

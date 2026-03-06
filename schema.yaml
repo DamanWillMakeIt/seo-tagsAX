@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  title: TheArchitect SEO Agent
+  description: AI-powered YouTube SEO generator that creates PDF strategies from Google Docs or Scripts.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+    description: Local Development Server
+
+paths:
+  /architect/seo:
+    post:
+      summary: Generate SEO Strategy PDF
+      description: |
+        Extracts content from a Google Doc or Cloudinary PDF, analyzes it using Gemini 2.0, 
+        and returns a multi-page PDF strategy with Tags, Descriptions, and Engagement hooks.
+      operationId: generateSeoReport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doc_link:
+                  type: string
+                  format: uri
+                  description: Public URL to a Google Doc or Cloudinary PDF containing the video script.
+                  example: "https://res.cloudinary.com/demo/raw/upload/script.pdf"
+                title:
+                  type: string
+                  description: Manual override for video title (optional if doc_link is provided).
+                script:
+                  type: string
+                  description: Raw script text (optional if doc_link is provided).
+      responses:
+        '200':
+          description: Successful Operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "success"
+                  pdf_url:
+                    type: string
+                    format: uri
+                    description: The direct Cloudinary link to the generated PDF.
+                  title_used:
+                    type: string
+                    description: The title extracted from the document or provided input.
+        '400':
+          description: Bad Request (Invalid link or missing content)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Content extraction failed"
+        '500':
+          description: Server Error (AI or PDF generation failure)
